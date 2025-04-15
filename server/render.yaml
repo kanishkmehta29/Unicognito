@@ -1,0 +1,7 @@
+services:
+  - name: Backend
+    env: node
+    buildCommand: |
+      pip install -r requirements.txt
+      npm install
+    startCommand: npm start

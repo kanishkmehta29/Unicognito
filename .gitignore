@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment Variables
+.env
+
+# Testing
+/coverage
+
+# Production
+/client/build
+/client/dist
+/server/dist
+
+# Misc
+.DS_Store
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Uploads - don't commit user uploaded files to git
+/server/uploads/*
+!/server/uploads/.gitkeep
+/server/public/uploads/*
+!/server/public/uploads/.gitkeep
+
+# Python related
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg

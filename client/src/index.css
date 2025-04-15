@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+#section1 {
+  background-image: url("/public/images/bg3.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+#section2 {
+  background-image: url("/public/images/bg3_2.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;  
+}
+
+#section3 {
+  background-image: url("/public/images/bg3_3.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+#section4 {
+  background-image: url("/public/images/bg3_2.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;  
+}
+
+#section5 {
+  background-image: url("/public/images/bg3_3.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+#section6 {
+  background-image: url("/public/images/bg3_2.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;  
+}
+
+#section7 {
+  background-image: url("/public/images/bg3_3.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.button {
+  transition: all 0.5s;
+}
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+  letter-spacing: 0.05rem;
+}
+
+.button span:after {
+  content: "»";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -15px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 15px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.active {
+  box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.2);
+  border-bottom: 2.5px solid #1d4ed8;
+}
+
+
+.section {
+  height: 100vh;
+}
