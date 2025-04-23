@@ -106,8 +106,8 @@ const Topbar = (props) => {
   }, [search]);
 
   return (
-    <div className="w-screen bg-white drop-shadow-md">
-      <div className="md:ml-[25vw] ml-[5vw] flex items-center py-[1.5vh] align-center justify-between">
+    <div className="w-full bg-white drop-shadow-md">
+      <div className="flex items-center py-[1.5vh] justify-between px-4 md:px-0">
         <div className="topic md:text-xl md:text-lg h-fit pl-[2vw]">
           {props.title}
         </div>

@@ -79,17 +79,21 @@ const Communities = () => {
     }
   }, [searchQuery, communities]);
 
+  // Ensure content is aligned to left when nav width changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, [isExpanded]);
+
   return (
-    <div className="flex flex-col md:flex-row bg-[#F8F8F8] min-h-screen">
+    <>
       {/* Navbar */}
       <Navbar 
         isExpanded={isExpanded} 
         setIsExpanded={setIsExpanded} 
         select={{ communities: true }}
       />
-      
-      {/* Main content */}
-      <div className={`flex-1 ${isExpanded ? 'md:ml-[240px]' : 'md:ml-[80px]'}`}>
+      {/* Main content wrapper offset for fixed sidebar */}
+      <div className={`bg-[#F8F8F8] min-h-screen ${isExpanded ? 'md:pl-[25vw]' : 'md:pl-[20vw]'}`}>
         <Topbar title="Communities" />
         
         <div className="container mx-auto px-4 py-8">
@@ -210,7 +214,7 @@ const Communities = () => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
