@@ -98,7 +98,25 @@ const CreateCommunity = () => {
     setError("");
     
     try {
-      const token = sessionStorage.getItem("token");
+      // Get token from either AuthContext or session storage
+      let token = null;
+      
+      // Try to get the token from session storage - check both formats
+      const userObject = sessionStorage.getItem("user");
+      if (userObject) {
+        try {
+          const parsedUser = JSON.parse(userObject);
+          token = parsedUser.token;
+        } catch (e) {
+          console.error("Error parsing user from session storage:", e);
+        }
+      }
+      
+      // If we still don't have a token, try the direct token storage
+      if (!token) {
+        token = sessionStorage.getItem("token");
+      }
+      
       if (!token) {
         throw new Error("You must be logged in to create a community");
       }
@@ -119,13 +137,19 @@ const CreateCommunity = () => {
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}` // Fixed capitalization to match standard
         },
         withCredentials: true
       };
       
+      // Get backend URL from environment or use default
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+      
+      console.log("Sending request to:", `${backendUrl}/communities`);
+      console.log("With token:", token.substring(0, 10) + "...");
+      
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/communities`,
+        `${backendUrl}/communities`,
         data,
         config
       );
