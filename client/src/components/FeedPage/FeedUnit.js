@@ -88,19 +88,13 @@ const FeedUnit = (props) => {
       .then((res) => {
         console.log("Like response:", res.data);
         
-        // Properly extract the like count and liked state from the response
+        // Update likes count from server response
         if (res.data.hasOwnProperty('likes')) {
-          // If the server returns a likes count
           setLikes(res.data.likes);
         }
         
-        if (res.data.hasOwnProperty('liked')) {
-          // If the server returns a liked boolean
-          setLiked(res.data.liked);
-        } else {
-          // Fallback to toggle behavior for backward compatibility
-          setLiked(!liked);
-        }
+        // Update liked state (always toggle the current user's like state)
+        setLiked(!liked);
       })
       .catch((error) => {
         console.error("Error liking post:", error);

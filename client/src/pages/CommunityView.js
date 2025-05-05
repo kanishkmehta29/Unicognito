@@ -415,25 +415,40 @@ const CommunityView = () => {
         },
         withCredentials: true,
       };
-      await axios.put(
+      
+      const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}/like`,
         {},
         config
       );
+      
+      console.log("Like response:", response.data);
 
       // Update local state to reflect the like
       const updatedPosts = posts.map((post) => {
         if (post._id === postId) {
-          // If user has already liked, remove their like; otherwise add it
-          const userLiked = post.likes?.includes(userId);
+          // Check if user has already liked the post
+          const userLiked = post.likes?.some(likeId => 
+            typeof likeId === 'object' 
+              ? likeId._id === userId 
+              : likeId === userId
+          );
+          
+          // If user already liked, remove their like; otherwise add it
+          const updatedLikes = userLiked
+            ? post.likes.filter(likeId => 
+                typeof likeId === 'object'
+                  ? likeId._id !== userId
+                  : likeId !== userId
+              )
+            : [...(post.likes || []), userId];
+            
           return {
             ...post,
-            likes: userLiked
-              ? post.likes.filter((id) => id !== userId)
-              : [...(post.likes || []), userId],
+            likes: updatedLikes,
           };
         }
-        return post; // This return was missing!
+        return post;
       });
 
       setPosts(updatedPosts);

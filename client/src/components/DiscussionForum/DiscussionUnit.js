@@ -138,36 +138,27 @@ const handleSubmit = () => {
               </div>
             </Link>
             <div className="flex flex-col md:items-start md:justify-center items-center">
-              <div className="flex gap-2 ">
-                <Link
-                  to={`/profile/${
-                    props.discussion.poster && props.discussion.poster._id
-                  }`}
-                  className="flex items-center gap-2"
-                >
-                  <div className="md:text-[1rem] text-[0.8rem]  font-semibold">
-                    {props.discussion.poster && props.discussion.poster.name}
+                <div className="flex gap-2 ">
+                  <Link
+                    to={`/profile/${
+                      props.discussion.poster && props.discussion.poster._id
+                    }`}
+                    className="flex items-center gap-2"
+                  >
+                    <div className="md:text-[1rem] text-[0.8rem]  font-semibold">
+                      {props.discussion.poster && props.discussion.poster.name}
+                    </div>
+                  </Link>
+                  <div className="flex items-center">
+                    <img
+                      src="images/verify.png"
+                      alt="Description"
+                      className="object-cover object-center w-[1.125rem] h-[1.125rem]"
+                    />
                   </div>
-                </Link>
-                <div className="flex items-center">
-                  <img
-                    src="images/verify.png"
-                    alt="Description"
-                    className="object-cover object-center w-[1.125rem] h-[1.125rem]"
-                  />
                 </div>
+                {/* Email display removed for privacy */}
               </div>
-              <Link
-                to={`/profile/${
-                  props.discussion.poster && props.discussion.poster._id
-                }`}
-                className="flex items-center gap-2"
-              >
-                <div className="text-[0.75rem] text-[#0016DA]">
-                  @{props.discussion.poster && props.discussion.poster.email}
-                </div>
-              </Link>
-            </div>
           </div>
           <div className="flex">
             <div className="text-[0.875rem] text-[#0016DA]">{hoursAgo}</div>

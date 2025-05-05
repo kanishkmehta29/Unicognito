@@ -106,11 +106,7 @@ const CommentCard = (props) => {
                             <img src="images/verify.png" alt="Description" className="object-cover object-center w-[1.125rem] h-[1.125rem]" />
                         </div>
                     </div>
-                    <Link to={`/profile/${props.comments.userId && props.comments.userId._id}`} className="flex items-center gap-2">
-                    <div className='text-[0.75rem] text-[#0016DA] align-bottom'>
-                        {props.comments.userId && props.comments.userId.email}
-                    </div>
-                    </Link>
+                    {/* Email display removed for privacy */}
                 </div>
                 <div className='md:col-span-3 flex flex-col items-end align-top'>
                     <div className='text-[0.875rem] text-[#0016DA]'>
