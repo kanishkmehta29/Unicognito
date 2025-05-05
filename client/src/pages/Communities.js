@@ -182,19 +182,26 @@ const Communities = () => {
                   className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
                 >
                   <div className="h-40 bg-gradient-to-r from-blue-500 to-purple-600 relative">
-                    {community.coverImage && (
+                    {community.coverImage ? (
                       <img
-                        src={`${process.env.REACT_APP_API_URL || 'http://localhost:3001'}${community.coverImage}`}
-                        alt={community.name}
+                        src={community.coverImage.startsWith('http') 
+                          ? community.coverImage 
+                          : `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001'}${community.coverImage}`}
+                        alt={community.title || community.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.target.onerror = null;
+                          console.log("Image load error for:", community.title);
+                          // Keep the image element but show the gradient background instead
                           e.target.style.display = 'none';
                         }}
                       />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                        <span className="text-white text-lg font-semibold opacity-50">No Cover Image</span>
+                      </div>
                     )}
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                      <h3 className="text-white font-bold text-xl">{community.name}</h3>
+                      <h3 className="text-white font-bold text-xl">{community.title || community.name}</h3>
                     </div>
                   </div>
                   <div className="p-4">

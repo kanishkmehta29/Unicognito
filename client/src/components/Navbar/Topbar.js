@@ -130,6 +130,25 @@ const Topbar = (props) => {
             />
           </div>
         )}
+        
+        {/* PROFILE BUTTON - ADDED DIRECTLY AFTER SEARCH BAR */}
+        {user && (
+          <a 
+            href={`/profile/${user._id}`} 
+            style={{
+              background: "#0016DA",
+              color: "white",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              margin: "0 10px",
+              display: "inline-block",
+              textDecoration: "none"
+            }}
+          >
+            PROFILE
+          </a>
+        )}
           
           <div className="">
             {user && (
@@ -154,15 +173,7 @@ const Topbar = (props) => {
               </div>
             )}
           </div>
-          <div>
-          <div onClick={() => window.location.href = "/chat"}>
-                <img
-                  src="/images/chat_ppl.svg"
-                  alt="Profile"
-                  className="mr-[0.5vw] ml-[0.5vw] w-[1.7rem] h-[1.7rem] rounded-full"
-                />
-              </div>            
-          </div>
+          
           <div className="flex items-center overflow-hidden h-[2rem]"
           onMouseEnter={() => setShowExit(true)}
           onMouseLeave={() => setShowExit(false)}>

@@ -42,6 +42,22 @@ const TopbarChat = (props) => {
           <div className="text-[#080808]">
             {props.currentUser ? props.currentUser.name : "Chat User"}
           </div>
+          
+          {/* Profile View Button */}
+          {props.currentUser && props.currentUser._id && (
+            <div className="ml-2 hidden md:block">
+              <Link 
+                to={`/profile/${props.currentUser._id}`} 
+                className="flex items-center bg-[#0016DA] hover:bg-[#0012A6] text-white py-2 px-4 rounded-lg font-medium transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+                <span>Profile</span>
+              </Link>
+            </div>
+          )}
+          
           <div className="flex items-center overflow-hidden h-[2rem]"
           onMouseEnter={() => setShowExit(true)}
           onMouseLeave={() => setShowExit(false)}>

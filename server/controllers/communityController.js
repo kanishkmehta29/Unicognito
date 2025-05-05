@@ -238,7 +238,6 @@ const createCommunityPost = async (req, res) => {
 };
 
 // Server-side join endpoint (example)
-// Fix for the joinCommunity function:
 const joinCommunity = async (req, res) => {
   try {
     const communityId = req.params.id;
@@ -252,16 +251,27 @@ const joinCommunity = async (req, res) => {
       return res.status(404).json({ message: "Community not found" });
     }
     
-    // Check if user is already a member using string comparison
-    const isMember = community.members.some(memberId => 
-      memberId.toString() === userId.toString()
+    // Debugging logs
+    console.log("User ID type:", typeof userId);
+    console.log("User ID value:", userId);
+    
+    // Convert all member IDs to strings for reliable comparison
+    const memberIdsAsStrings = community.members.map(memberId => 
+      memberId.toString()
     );
+    
+    console.log("Member IDs as strings:", memberIdsAsStrings);
+    console.log("User ID as string:", userId.toString());
+    
+    // Check if user is already a member using array includes with string comparison
+    const isMember = memberIdsAsStrings.includes(userId.toString());
+    console.log("Is member result:", isMember);
     
     if (isMember) {
       return res.status(400).json({ message: "You are already a member of this community" });
     }
     
-    // FIX HERE: Just push the userId directly instead of creating a new ObjectId
+    // Add the user ID to the community members
     community.members.push(userId);
     
     try {
