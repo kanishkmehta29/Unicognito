@@ -542,13 +542,11 @@ const CommunityView = () => {
   return (
     <div className="flex flex-col md:flex-row bg-[#F8F8F8] min-h-screen pb-[5rem] overflow-x-hidden">
       {/* Navbar - fixed position */}
-      <div className="fixed z-[999] h-full">
-        <Navbar
-          isExpanded={isExpanded}
-          setIsExpanded={setIsExpanded}
-          select={{ communities: true }}
-        />
-      </div>
+      <Navbar
+        isExpanded={isExpanded}
+        setIsExpanded={setIsExpanded}
+        select={{ communities: true }}
+      />
 
       {/* Post creation form overlay */}
       {isPostFormOpen && (
@@ -748,306 +746,307 @@ const CommunityView = () => {
         </div>
       )}
 
-      {/* Main content area */}
-      <div
-        className={`w-full transition-all duration-300 ${
-          isExpanded ? "md:ml-[240px]" : "md:ml-[80px]"
-        } md:pr-5 mx-auto max-w-[1200px]`}
-      >
+      {/* Main content area - Added proper left padding to account for navbar */}
+      <div className={`w-full bg-[#F8F8F8] min-h-screen ${isExpanded ? 'md:pl-[25vw]' : 'md:pl-[20vw]'}`}>
         <Topbar title={community.title || community.name} />
 
-        {/* Community header with image */}
-        <div className="relative mb-8 mt-4 mx-auto px-4 md:px-8 max-w-full">
-          {community?.coverImage && !coverImageError ? (
-            <div className="h-48 w-full rounded-lg overflow-hidden shadow-md">
-              <img
-                src={`${process.env.REACT_APP_BACKEND_URL}${community.coverImage}`}
-                alt={community.title || community.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  setCoverImageError(true);
-                }}
-              />
-              <div className="absolute bottom-4 left-8 text-white">
-                <h1 className="text-3xl font-bold drop-shadow-lg">
-                  {community.title || community.name}
-                </h1>
-                <p className="text-lg drop-shadow-md">
-                  {community.description}
-                </p>
+        {/* Rest of the community content */}
+        <div className="container mx-auto px-4 py-8">
+          {/* Community header with image */}
+          <div className="relative mb-8 mt-4 mx-auto max-w-full">
+            {community?.coverImage && !coverImageError ? (
+              <div className="h-48 w-full rounded-lg overflow-hidden shadow-md">
+                <img
+                  src={`${process.env.REACT_APP_BACKEND_URL}${community.coverImage}`}
+                  alt={community.title || community.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    setCoverImageError(true);
+                  }}
+                />
+                <div className="absolute bottom-4 left-8 text-white">
+                  <h1 className="text-3xl font-bold drop-shadow-lg">
+                    {community.title || community.name}
+                  </h1>
+                  <p className="text-lg drop-shadow-md">
+                    {community.description}
+                  </p>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="h-48 w-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md">
-              <div className="absolute bottom-4 left-8 text-white">
-                <h1 className="text-3xl font-bold drop-shadow-lg">
-                  {community.title || community.name}
-                </h1>
-                <p className="text-lg drop-shadow-md">
-                  {community.description}
-                </p>
+            ) : (
+              <div className="h-48 w-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md">
+                <div className="absolute bottom-4 left-8 text-white">
+                  <h1 className="text-3xl font-bold drop-shadow-lg">
+                    {community.title || community.name}
+                  </h1>
+                  <p className="text-lg drop-shadow-md">
+                    {community.description}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* Community Info */}
-        <div className="mx-auto px-4 md:px-8 mb-8">
-          <div className="bg-white p-4 rounded-xl shadow-sm">
-            <div className="flex flex-wrap justify-between items-center">
-              <div className="mb-2 md:mb-0">
-                <p className="text-gray-600">
+          {/* Community Info */}
+          <div className="mb-8">
+            <div className="bg-white p-4 rounded-xl shadow-sm">
+              <div className="flex flex-wrap justify-between items-center">
+                <div className="mb-2 md:mb-0">
+                  <p className="text-gray-600">
+                    <span className="font-semibold">
+                      {community?.members?.length || 0}
+                    </span>{" "}
+                    members
+                  </p>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-gray-600 mr-2">Created by:</span>
                   <span className="font-semibold">
-                    {community?.members?.length || 0}
-                  </span>{" "}
-                  members
-                </p>
+                    {community?.userAdmins && community.userAdmins[0]
+                      ? community.userAdmins[0].name ||
+                        community.userAdmins[0].email ||
+                        "Unknown"
+                      : "Unknown"}
+                  </span>
+                </div>
+                <div className="w-full md:w-auto mt-2 md:mt-0">
+                  {isAdmin ? (
+                    <button
+                      onClick={() => navigate(`/community/${id}/manage`)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg w-full md:w-auto"
+                    >
+                      Manage Community
+                    </button>
+                  ) : isMember ? (
+                    <button
+                      onClick={handleLeaveCommunity}
+                      className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg w-full md:w-auto"
+                    >
+                      Leave Community
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleJoinCommunity}
+                      className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg w-full md:w-auto"
+                    >
+                      Join Community
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center">
-                <span className="text-gray-600 mr-2">Created by:</span>
-                <span className="font-semibold">
-                  {community?.userAdmins && community.userAdmins[0]
-                    ? community.userAdmins[0].name ||
-                      community.userAdmins[0].email ||
-                      "Unknown"
-                    : "Unknown"}
-                </span>
-              </div>
-              <div className="w-full md:w-auto mt-2 md:mt-0">
-                {isAdmin ? (
-                  <button
-                    onClick={() => navigate(`/community/${id}/manage`)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg w-full md:w-auto"
-                  >
-                    Manage Community
-                  </button>
-                ) : isMember ? (
-                  <button
-                    onClick={handleLeaveCommunity}
-                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg w-full md:w-auto"
-                  >
-                    Leave Community
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleJoinCommunity}
-                    className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg w-full md:w-auto"
-                  >
-                    Join Community
-                  </button>
+
+              {/* Display tags if any */}
+              {community?.tags && community.tags.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1">
+                  {community.tags.map((tag) => (
+                    <Chip
+                      key={typeof tag === "object" ? tag._id : tag}
+                      label={typeof tag === "object" ? tag.title : tag}
+                      size="small"
+                      sx={{
+                        backgroundColor: "#e0e7ff",
+                        color: "#4338ca",
+                        fontSize: "0.7rem",
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Filters Section */}
+          <div
+            className="mt-[2rem] min-h-[2rem] z-[100] relative"
+            ref={filterRef}
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Posts</h2>
+              <img
+                src="/images/filter.svg"
+                alt="filter"
+                className="w-[1.7rem] h-[1.7rem] cursor-pointer"
+                onClick={handleFilter}
+              />
+            </div>
+            <div
+              className={`bg-white p-4 absolute mt-2 right-4 shadow-xl min-w-[200px] w-[90%] md:w-[300px] z-20 ${
+                isFilterOpen ? "block" : "hidden"
+              }`}
+            >
+              <Autocomplete
+                options={sortOptions}
+                value={selectedSortOption}
+                clearIcon={false}
+                disableClearable
+                getOptionLabel={(option) => option.title}
+                onChange={(e, value) => value && setSelectedSortOption(value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Sort By"
+                    placeholder="Select sorting option"
+                  />
+                )}
+              />
+            </div>
+          </div>
+
+          {/* Posts List */}
+          <div className="mt-4 pb-20">
+            {filteredPosts.length === 0 ? (
+              <div className="text-center py-10 bg-white rounded-lg shadow-sm">
+                <p className="text-xl">No posts yet</p>
+                {isMember && (
+                  <p className="mt-2 text-gray-600">
+                    Be the first to share something!
+                  </p>
+                )}
+                {!isMember && (
+                  <p className="mt-2 text-gray-600">
+                    Join the community to start posting
+                  </p>
                 )}
               </div>
-            </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredPosts.map((post) => (
+                  <div
+                    key={post._id}
+                    className="bg-white border rounded-xl p-5 shadow-sm"
+                  >
+                    <div className="flex items-center mb-3">
+                      {post.author?.profilePicture ? (
+                        <img
+                          src={post.author.profilePicture}
+                          alt={post.author.name}
+                          className="w-10 h-10 rounded-full mr-3"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://via.placeholder.com/40?text=U";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-gray-300 rounded-full mr-3 flex items-center justify-center">
+                          {post.author?.name?.charAt(0) || "U"}
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold">
+                          {post.author?.name || "Unknown User"}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(post.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="mb-4">{post.content}</p>
 
-            {/* Display tags if any */}
-            {community?.tags && community.tags.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1">
-                {community.tags.map((tag) => (
-                  <Chip
-                    key={typeof tag === "object" ? tag._id : tag}
-                    label={typeof tag === "object" ? tag.title : tag}
-                    size="small"
-                    sx={{
-                      backgroundColor: "#e0e7ff",
-                      color: "#4338ca",
-                      fontSize: "0.7rem",
-                    }}
-                  />
+                    {/* Post Media */}
+                    {post.mediaArray && post.mediaArray.length > 0 && (
+                      <div
+                        className={`grid ${
+                          post.mediaArray.length === 1
+                            ? "grid-cols-1"
+                            : post.mediaArray.length === 2
+                            ? "grid-cols-2"
+                            : "grid-cols-3"
+                        } gap-2 mb-4`}
+                      >
+                        {post.mediaArray.map((media, index) => {
+                          const isImage =
+                            media.endsWith(".jpg") ||
+                            media.endsWith(".jpeg") ||
+                            media.endsWith(".png") ||
+                            media.endsWith(".gif");
+                          const isVideo =
+                            media.endsWith(".mp4") ||
+                            media.endsWith(".webm") ||
+                            media.endsWith(".mov");
+
+                          return (
+                            <div
+                              key={index}
+                              className={`rounded-lg overflow-hidden ${
+                                post.mediaArray.length === 1
+                                  ? "max-h-[400px]"
+                                  : "max-h-[200px]"
+                              }`}
+                            >
+                              {isImage ? (
+                                <img
+                                  src={`${process.env.REACT_APP_BACKEND_URL}/uploads/communities/${media}`}
+                                  alt={`Post attachment ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.style.display = "none";
+                                  }}
+                                />
+                              ) : isVideo ? (
+                                <video
+                                  src={`${process.env.REACT_APP_BACKEND_URL}${media}`}
+                                  className="w-full h-full object-cover"
+                                  controls
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                  Attachment
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Post Actions */}
+                    <div className="flex items-center space-x-4 text-gray-500">
+                      <button
+                        className={`flex items-center space-x-1 ${
+                          post.likes?.includes(getUserId())
+                            ? "text-blue-600"
+                            : ""
+                        }`}
+                        onClick={() => handleLikePost(post._id)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span>{post.likes?.length || 0} Likes</span>
+                      </button>
+                      <button
+                        className="flex items-center space-x-1"
+                        onClick={() => handleShowComments(post)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span>{post.comments?.length || 0} Comments</span>
+                      </button>
+                    </div>
+                  </div>
                 ))}
               </div>
             )}
           </div>
-        </div>
-
-        {/* Filters Section */}
-        <div
-          className="mt-[2rem] mx-auto px-4 md:px-8 min-h-[2rem] z-[100] relative"
-          ref={filterRef}
-        >
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Posts</h2>
-            <img
-              src="/images/filter.svg"
-              alt="filter"
-              className="w-[1.7rem] h-[1.7rem] cursor-pointer"
-              onClick={handleFilter}
-            />
-          </div>
-          <div
-            className={`bg-white p-4 absolute mt-2 right-4 shadow-xl min-w-[200px] w-[90%] md:w-[300px] z-20 ${
-              isFilterOpen ? "block" : "hidden"
-            }`}
-          >
-            <Autocomplete
-              options={sortOptions}
-              value={selectedSortOption}
-              clearIcon={false}
-              disableClearable
-              getOptionLabel={(option) => option.title}
-              onChange={(e, value) => value && setSelectedSortOption(value)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Sort By"
-                  placeholder="Select sorting option"
-                />
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Posts List */}
-        <div className="mx-auto px-4 md:px-8 mt-4 pb-20">
-          {filteredPosts.length === 0 ? (
-            <div className="text-center py-10 bg-white rounded-lg shadow-sm">
-              <p className="text-xl">No posts yet</p>
-              {isMember && (
-                <p className="mt-2 text-gray-600">
-                  Be the first to share something!
-                </p>
-              )}
-              {!isMember && (
-                <p className="mt-2 text-gray-600">
-                  Join the community to start posting
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {filteredPosts.map((post) => (
-                <div
-                  key={post._id}
-                  className="bg-white border rounded-xl p-5 shadow-sm"
-                >
-                  <div className="flex items-center mb-3">
-                    {post.author?.profilePicture ? (
-                      <img
-                        src={post.author.profilePicture}
-                        alt={post.author.name}
-                        className="w-10 h-10 rounded-full mr-3"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src =
-                            "https://via.placeholder.com/40?text=U";
-                        }}
-                      />
-                    ) : (
-                      <div className="w-10 h-10 bg-gray-300 rounded-full mr-3 flex items-center justify-center">
-                        {post.author?.name?.charAt(0) || "U"}
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-semibold">
-                        {post.author?.name || "Unknown User"}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="mb-4">{post.content}</p>
-
-                  {/* Post Media */}
-                  {post.mediaArray && post.mediaArray.length > 0 && (
-                    <div
-                      className={`grid ${
-                        post.mediaArray.length === 1
-                          ? "grid-cols-1"
-                          : post.mediaArray.length === 2
-                          ? "grid-cols-2"
-                          : "grid-cols-3"
-                      } gap-2 mb-4`}
-                    >
-                      {post.mediaArray.map((media, index) => {
-                        const isImage =
-                          media.endsWith(".jpg") ||
-                          media.endsWith(".jpeg") ||
-                          media.endsWith(".png") ||
-                          media.endsWith(".gif");
-                        const isVideo =
-                          media.endsWith(".mp4") ||
-                          media.endsWith(".webm") ||
-                          media.endsWith(".mov");
-
-                        return (
-                          <div
-                            key={index}
-                            className={`rounded-lg overflow-hidden ${
-                              post.mediaArray.length === 1
-                                ? "max-h-[400px]"
-                                : "max-h-[200px]"
-                            }`}
-                          >
-                            {isImage ? (
-                              <img
-                                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/communities/${media}`}
-                                alt={`Post attachment ${index + 1}`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.style.display = "none";
-                                }}
-                              />
-                            ) : isVideo ? (
-                              <video
-                                src={`${process.env.REACT_APP_BACKEND_URL}${media}`}
-                                className="w-full h-full object-cover"
-                                controls
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                Attachment
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Post Actions */}
-                  <div className="flex items-center space-x-4 text-gray-500">
-                    <button
-                      className={`flex items-center space-x-1 ${
-                        post.likes?.includes(getUserId()) ? "text-blue-600" : ""
-                      }`}
-                      onClick={() => handleLikePost(post._id)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                      </svg>
-                      <span>{post.likes?.length || 0} Likes</span>
-                    </button>
-                    <button
-                      className="flex items-center space-x-1"
-                      onClick={() => handleShowComments(post)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span>{post.comments?.length || 0} Comments</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
